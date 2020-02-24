@@ -1,0 +1,11 @@
+*.env
+*.vscode
+
+media
+*.pyc
+
+db.sqlite3
+
+*.json
+
+*.pickle
