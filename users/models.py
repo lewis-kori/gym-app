@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 TRAINER = "Trainer"
@@ -36,13 +38,14 @@ class UserAccount(AbstractUser):
     role = models.CharField(max_length=15, choices=ROLES, default="Member")
     location = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(unique=True, null=False)
-    phone_number = PhoneNumberField()
+    phone_number = models.CharField(max_length=10, null=True,blank=True)
     image = models.ImageField(upload_to="user_pics", null=True, blank=True)
 
     objects = CustomUserManager()
     REQUIRED_FIELDS = [
         "first_name",
         "last_name",
+        "phone_number",
     ]
     USERNAME_FIELD = "email"
 
@@ -94,3 +97,4 @@ class NextOfKin(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+

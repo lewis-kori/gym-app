@@ -43,9 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # third party apps
+    'allauth',
+    'allauth.account',
     'djoser',
+    'phonenumber_field',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
+
 
     # dev defined apps
     'core',
@@ -55,6 +60,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -115,6 +121,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 SITE_ID = 1
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
@@ -155,6 +166,7 @@ AUTH_USER_MODEL = 'users.UserAccount'
 # restframework configs
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTTokenUserAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
@@ -170,7 +182,7 @@ DJOSER = {
         'user': 'users.serializers.CustomUserSerializer',
         'current_user': 'users.serializers.CustomUserSerializer',
     },
-    'LOGIN_FIELD': 'email'
+    'LOGIN_FIELD': 'email',
 }
 
 

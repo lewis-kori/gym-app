@@ -1,4 +1,6 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, DestroyAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.filters import SearchFilter
 
 from core.apiv1.serializers.gymclass import (
     GymClassListSerializer,
@@ -6,6 +8,9 @@ from core.apiv1.serializers.gymclass import (
 )
 from core.models import GymClass
 
+class DynamicSearchFilter(SearchFilter):
+    def get_search_fields(self, view, request):
+        return request.GET.getlist('search_fields', [])
 # creation of a gym class. limit creation to a trainer
 class GymClassCreateAPIView(CreateAPIView):
     queryset = GymClass.objects.all()
@@ -23,6 +28,9 @@ class GymClassCreateAPIView(CreateAPIView):
 class GymClassListAPIView(ListAPIView):
     queryset = GymClass.objects.all()
     serializer_class = GymClassListSerializer
+    permission_classes = [AllowAny,]
+    search_fields = ['day_of_week']
+    filter_backends = [DynamicSearchFilter,]
 
 
 # shows gym class Details
