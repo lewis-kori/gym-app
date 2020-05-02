@@ -69,20 +69,18 @@ class TrainerProfile(models.Model):
         UserAccount, limit_choices_to={"role": "Trainer"}, on_delete=models.CASCADE
     )
     description = models.TextField()
+    specialities = models.ManyToManyField('TrainerSpeciality')
 
     def __str__(self):
         return f"{self.user}"
 
 
-class TrainerSpecialty(models.Model):
-    trainer = models.ForeignKey(
-        TrainerProfile, related_name="specialties", on_delete=models.CASCADE
-    )
+class TrainerSpeciality(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
 
     def __str__(self):
-        return f"{self.trainer} {self.name}"
+        return f"{self.name}"
 
 
 class NextOfKin(models.Model):

@@ -204,3 +204,5 @@ PHONENUMBER_DEFAULT_REGION='KE'
 
 # google calendar credentials
 GOOGLE_SERVICE_ACCOUNT_KEY_FILE_PATH=os.path.join(BASE_DIR, 'gymit-service.json')
+
+APPEND_SLASH=False 

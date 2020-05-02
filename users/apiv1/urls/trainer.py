@@ -1,13 +1,15 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from users.apiv1.views.trainer import TrainerAPIView,TrainerSpecialtyListAPIView
+from ...apiv1.views.trainer import (TrainerAPIView, TrainerListAPIView,
+                                    TrainerSpecialtyListAPIView)
 
 router = DefaultRouter()
 
-router.register('', TrainerAPIView)
+router.register("", TrainerAPIView)
 
 urlpatterns = [
-    path('',include(router.urls)),
-    path('specialties/<int:pk>/',TrainerSpecialtyListAPIView.as_view()),
+    path("profiles/", include(router.urls)),
+    path("all/", TrainerListAPIView.as_view()),
+    path("specialties/", TrainerSpecialtyListAPIView.as_view()),
 ]

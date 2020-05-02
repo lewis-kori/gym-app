@@ -1,4 +1,7 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
+from django.contrib.auth import get_user_model
+from rest_framework.serializers import Serializer
+User = get_user_model()
 
 class UserRegistrationSerializer(UserCreateSerializer):
     """
@@ -34,3 +37,7 @@ class CustomUserSerializer(UserSerializer):
             'image',
             "is_superuser",
         )
+class UserSerializer(Serializer):
+    class Meta:
+        model = User
+        fields = '__all__'
