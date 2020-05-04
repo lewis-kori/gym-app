@@ -27,18 +27,10 @@ class GymClassListSerializer(ModelSerializer):
         default=CurrentUserDefault()
     )
     attendees = StringRelatedField(many=True, read_only=True)
-    start_time = SerializerMethodField()
-    end_time = SerializerMethodField()
 
     class Meta:
         model = GymClass
         fields = "__all__"
-
-    def get_start_time(self, instance):
-        return instance.start_time.strftime('%a %H:%M')
-
-    def get_end_time(self, instance):
-        return instance.end_time.strftime('%a %H:%M')
 
 # serialize gym class for creation endpoint display
 class GymClassCreateSerializer(ModelSerializer):

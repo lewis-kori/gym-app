@@ -12,5 +12,5 @@ router.register('next-of-kin',NextOfKinAPIView)
 urlpatterns = [
     path('',include(router.urls)),
     path('create/',MemberProfileCreateAPIView.as_view()),
-    path('read/<int:pk>/',MemberProfileReadUpdateAPIView.as_view()),
+    path('retrieve/<int:pk>/',MemberProfileReadUpdateAPIView.as_view()),
 ]

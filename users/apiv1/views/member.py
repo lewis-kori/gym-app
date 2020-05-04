@@ -18,7 +18,7 @@ class MemberProfileCreateAPIView(CreateAPIView):
 # update/read member's profile
 class MemberProfileReadUpdateAPIView(RetrieveUpdateAPIView):
     serializer_class = MemberDetailSerializer
-    queryset = MemberProfile.objects.all()
+
     # get a member's profile from the api
     def get_queryset(self):
         user_id = self.kwargs["pk"]

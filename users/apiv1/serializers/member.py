@@ -7,7 +7,7 @@ from rest_framework.serializers import (
 )
 
 from users.models import MemberProfile, NextOfKin
-
+from users.serializers import CustomUserSerializer
 
 # serialize member profile for creation
 class MemberProfileCreateSerializer(ModelSerializer):
@@ -20,7 +20,7 @@ class MemberProfileCreateSerializer(ModelSerializer):
 
 # serialize member's profile
 class MemberDetailSerializer(ModelSerializer):
-    user = PrimaryKeyRelatedField(read_only=True)
+    user = CustomUserSerializer(read_only=True)
 
     class Meta:
         model = MemberProfile
