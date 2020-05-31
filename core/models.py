@@ -84,11 +84,7 @@ class GymClass(models.Model):
             },
         }
 
-        event = (
-            service.events()
-            .insert(calendarId="primary", body=event)
-            .execute()
-        )
+        event = service.events().insert(calendarId="primary", body=event).execute()
         session = GymClass.objects.get(id=self.id)
         session.google_calendar_id = event.get("id")
         session.save(update_fields=["google_calendar_id"])
@@ -135,3 +131,35 @@ class Attendee(models.Model):
 
     def __str__(self):
         return f"#{self.id} {self.member}-{self.gym_class}"
+
+
+# personal training session
+class PersonalTraining(models.Model):
+    gym_member = models.ForeignKey(
+        User,
+        related_name="member_personal_trainings",
+        limit_choices_to={"role": "Member"},
+        on_delete=models.CASCADE
+    )
+    gym_trainer = models.ForeignKey(
+        User,
+        related_name="trainer_personal_trainings",
+        limit_choices_to={"role": "Trainer"},
+        on_delete=models.CASCADE
+    )
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    location_name = models.CharField(max_length=255,null=True,blank=True)
+    lon = models.DecimalField(max_digits=11, decimal_places=8, null=True, blank=True)
+    lat = models.DecimalField(max_digits=11, decimal_places=8, null=True, blank=True)
+    terms = models.TextField()
+    is_onsite = models.BooleanField(default=False)
+    is_accepted = models.BooleanField(default=False)
+    google_calendar_id = models.CharField(max_length=255,null=True,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'member is: {self.gym_member} and trainer is: {self.gym_trainer}'
+
+
+

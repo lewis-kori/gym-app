@@ -22,7 +22,6 @@ class WorkoutCategorySerializer(ModelSerializer):
 
 # serialize gym class for list display
 class GymClassListSerializer(ModelSerializer):
-    # category = PrimaryKeyRelatedField(read_only=True)
     trainer = StringRelatedField(
         default=CurrentUserDefault()
     )
