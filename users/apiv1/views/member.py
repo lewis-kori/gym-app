@@ -18,11 +18,13 @@ class MemberProfileCreateAPIView(CreateAPIView):
 # update/read member's profile
 class MemberProfileReadUpdateAPIView(RetrieveUpdateAPIView):
     serializer_class = MemberDetailSerializer
+    queryset = MemberProfile.objects.all()
 
     # get a member's profile from the api
-    def get_queryset(self):
+    def get_object(self):
         user_id = self.kwargs["pk"]
-        return MemberProfile.objects.filter(user__id=user_id)
+        profile = MemberProfile.objects.get(user__id=user_id)
+        return profile
 
 
 # create member's next of kin
