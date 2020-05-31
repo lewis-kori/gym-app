@@ -1,7 +1,7 @@
+from django.core.exceptions import ObjectDoesNotExist
 from djoser.serializers import UserCreateSerializer, UserSerializer
-from django.contrib.auth import get_user_model
-from rest_framework.serializers import Serializer
-User = get_user_model()
+from rest_framework.serializers import SerializerMethodField
+
 
 class UserRegistrationSerializer(UserCreateSerializer):
     """
@@ -25,7 +25,8 @@ class CustomUserSerializer(UserSerializer):
     """
     Override djoser current user serializer to return abstact user fields
     """
-    # phone_number = SerializerMethodField()
+    has_profile = SerializerMethodField()
+
     class Meta(UserSerializer.Meta):
         fields = (
             "id",
@@ -36,8 +37,21 @@ class CustomUserSerializer(UserSerializer):
             "location",
             'image',
             "is_superuser",
+            "has_profile",
         )
-class UserSerializer(Serializer):
-    class Meta:
-        model = User
-        fields = '__all__'
+
+    def get_has_profile(self, obj):
+        if obj.role == 'Member':
+            # check if the users have profiles associated with them
+            try:
+                return bool(obj.member_profiles)
+            except ObjectDoesNotExist:
+                return False
+
+        elif obj.role == 'Trainer':
+            try:
+                return bool(obj.trainer_profiles)
+            except ObjectDoesNotExist:
+                return False
+        else:
+            return None

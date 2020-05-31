@@ -55,7 +55,7 @@ class UserAccount(AbstractUser):
 
 class MemberProfile(models.Model):
     user = models.OneToOneField(
-        UserAccount, limit_choices_to={"role": "Member"}, on_delete=models.CASCADE
+        UserAccount, related_name='member_profiles',limit_choices_to={"role": "Member"}, on_delete=models.CASCADE
     )
     is_disabled = models.BooleanField(default=False)
     description = models.TextField()
@@ -66,7 +66,7 @@ class MemberProfile(models.Model):
 
 class TrainerProfile(models.Model):
     user = models.OneToOneField(
-        UserAccount, limit_choices_to={"role": "Trainer"}, on_delete=models.CASCADE
+        UserAccount,related_name='trainer_profiles', limit_choices_to={"role": "Trainer"}, on_delete=models.CASCADE
     )
     description = models.TextField()
     specialities = models.ManyToManyField('TrainerSpeciality')
