@@ -65,6 +65,9 @@ class TrainerGymClassListAPIView(ListAPIView):
 class GymClassDetailAPIView(RetrieveUpdateAPIView):
     queryset = GymClass.objects.all()
     serializer_class = GymClassDetailSerializer
+    permission_classes = [
+        AllowAny,
+    ]
 
 
 class GymClassDeleteAPIView(DestroyAPIView):
