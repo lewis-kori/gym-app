@@ -31,6 +31,7 @@ class CustomUserSerializer(UserSerializer):
         fields = (
             "id",
             'first_name',
+            'last_name',
             "role",
             "email",
             "phone_number",
