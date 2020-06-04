@@ -56,6 +56,6 @@ class AcceptPersonalTrainingAPIView(APIView):
             request.save()
             return Response({"detail":"Confirmation successful."},status=HTTP_200_OK)
         elif data['accept'] == 'false':
-            request.is_accepted = True
+            request.is_accepted = False
             request.save()
             return Response({"detail":"Member will be notified of your response."},status=HTTP_200_OK)
