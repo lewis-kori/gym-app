@@ -1,16 +1,17 @@
-from rest_framework.serializers import (
-    ModelSerializer,
-    StringRelatedField,
-    PrimaryKeyRelatedField,
-    HiddenField,
-    CurrentUserDefault,
-    SerializerMethodField,
-)
-from django.forms import model_to_dict
 from django.contrib.auth import get_user_model
+# from django.core.exceptions import Attr
+from django.forms import model_to_dict
+from rest_framework.serializers import (CurrentUserDefault, HiddenField,
+                                        ModelSerializer,
+                                        PrimaryKeyRelatedField,
+                                        SerializerMethodField,
+                                        StringRelatedField)
+
 from core.models import Attendee, GymClass, WorkoutCategory
-from users.apiv1.serializers.trainer import TrainerDetailSerializer,TrainerProfile
+from users.apiv1.serializers.trainer import (TrainerDetailSerializer,
+                                             TrainerProfile)
 from users.serializers import CustomUserSerializer
+
 User = get_user_model()
 
 # serialize workout categories
@@ -48,7 +49,19 @@ class GymClassDetailSerializer(ModelSerializer):
     attendees = StringRelatedField(many=True)
     category = WorkoutCategorySerializer(read_only=True)
     trainer = CustomUserSerializer(read_only=True)
+    current_user_booked = SerializerMethodField()
 
     class Meta:
         model = GymClass
         fields = "__all__"
+
+    def get_current_user_booked(self, obj):
+        user = self.context['request'].user
+        # catch anonymous user attribute error
+        try:
+            if user.attendance.all().exists():
+                return True
+            else:
+                return False
+        except:
+            return False
