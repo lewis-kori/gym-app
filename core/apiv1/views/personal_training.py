@@ -52,10 +52,23 @@ class AcceptPersonalTrainingAPIView(APIView):
         request = get_object_or_404(PersonalTraining,gym_trainer=user,id=data['request_id'])
         
         if data['accept'] == 'true':
+            if request.is_accepted:
+                raise PermissionDenied(detail='It appears you had already accepted this booking. We appreciate the enthuthiasm.')
+            
             request.is_accepted = True
+            request.create_booking()
             request.save()
             return Response({"detail":"Confirmation successful."},status=HTTP_200_OK)
         elif data['accept'] == 'false':
+
+            # if the booking had previously been accepted and scheduled by google calendar, delete that instance
+            if request.is_accepted and request.google_calendar_id:
+                request.cancel_booking()
+                request.is_accepted = False
+                request.save()
+                return Response({"detail":"Member will be notified of your response."},status=HTTP_200_OK)
+
+            # if it hadn't been accepted, send an email notification to the members to reduce anticipation
             request.is_accepted = False
             request.save()
             return Response({"detail":"Member will be notified of your response."},status=HTTP_200_OK)

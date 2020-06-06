@@ -85,9 +85,8 @@ class GymClass(models.Model):
         }
 
         event = service.events().insert(calendarId="primary", body=event).execute()
-        session = GymClass.objects.get(id=self.id)
-        session.google_calendar_id = event.get("id")
-        session.save(update_fields=["google_calendar_id"])
+        self.google_calendar_id = event.get("id")
+        self.save(update_fields=["google_calendar_id"])
 
     # updates a google calendar event and appends new attendees whenever called
     def update_event(self, member_email):
@@ -160,6 +159,49 @@ class PersonalTraining(models.Model):
 
     def __str__(self):
         return f'member is: {self.gym_member} and trainer is: {self.gym_trainer}'
+
+    # the method creates a google calendar event when called
+    def create_booking(self):
+
+        creds = calendar_setup()
+
+        service = build("calendar", "v3", credentials=creds)
+
+        event = {
+            "summary": f'Personal traning for {self.gym_member.get_full_name()} by {self.gym_trainer.get_full_name()}',
+            "location": self.location_name,
+            "description": self.terms,
+            "start": {
+                "dateTime": self.start_time.strftime("%Y-%m-%dT%H:%M:%S.%f"),
+                "timeZone": "Africa/Nairobi",
+            },
+            "end": {
+                "dateTime": self.end_time.strftime("%Y-%m-%dT%H:%M:%S.%f"),
+                "timeZone": "Africa/Nairobi",
+            },
+            # "recurrence": ["RRULE:FREQ=DAILY;COUNT=2"],
+            "attendees": [{"email": self.gym_trainer.email},{"email": self.gym_member.email},],
+            "reminders": {
+                "useDefault": False,
+                "overrides": [
+                    {"method": "email", "minutes": 24 * 60},
+                    {"method": "popup", "minutes": 10},
+                ],
+            },
+        }
+
+        event = service.events().insert(calendarId="primary", body=event).execute()
+        # session = GymClass.objects.get(id=self.id)
+        self.google_calendar_id = event.get("id")
+        self.save(update_fields=["google_calendar_id"])
+
+    # delete a google calendar event instance when called
+    def cancel_booking(self):
+        creds = calendar_setup()
+        service = build("calendar", "v3", credentials=creds)
+        service.events().delete(
+            calendarId="primary", eventId=self.google_calendar_id, sendUpdates="all"
+        ).execute()
 
 
 

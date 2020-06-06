@@ -16,6 +16,10 @@ class BookClassAttendanceAPIView(APIView):
     def post(self, request, **kwargs):
         user = get_object_or_404(User, id=self.request.user.id)
         gym_class = get_object_or_404(GymClass, id=kwargs["pk"])
+        attendance_qs = Attendee.objects.filter(member=user, gym_class=gym_class)
+        if attendance_qs.exists():
+            raise PermissionDenied(detail='Oops, it appears you had already booked this session. We appreciate the enthusiasm though.')
+
         attendance = Attendee.objects.create(member=user, gym_class=gym_class)
         attendance_email = attendance.member.email
         gym_class.update_event(attendance_email)
