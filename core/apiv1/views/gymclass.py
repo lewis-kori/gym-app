@@ -75,5 +75,7 @@ class GymClassDeleteAPIView(DestroyAPIView):
     serializer_class = GymClassListSerializer
 
     def perform_destroy(self, instance):
-        instance.delete_event(instance.google_calendar_id)
+        if instance.google_calendar_id:
+            instance.delete_event(instance.google_calendar_id)
+            return super().perform_destroy(instance)
         return super().perform_destroy(instance)
