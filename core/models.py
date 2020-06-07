@@ -154,6 +154,7 @@ class PersonalTraining(models.Model):
     terms = models.TextField()
     is_onsite = models.BooleanField(default=False)
     is_accepted = models.BooleanField(default=False)
+    member_cancellation = models.BooleanField(default=False)
     google_calendar_id = models.CharField(max_length=255,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

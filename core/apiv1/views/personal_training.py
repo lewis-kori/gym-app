@@ -72,3 +72,30 @@ class AcceptPersonalTrainingAPIView(APIView):
             request.is_accepted = False
             request.save()
             return Response({"detail":"Member will be notified of your response."},status=HTTP_200_OK)
+
+# MEMBER cancellation of a booking
+class MemberCancelPersonalTrainingAPIView(APIView):
+    def post(self, request, **kwargs):
+        data = request.data
+        user = request.user
+        permission_classes = [IsAuthenticated,]
+        
+        # ensure only a trainer has access to the endpoint
+        if user.role != 'Member':
+            raise PermissionDenied(detail='It appears you are not a member') 
+
+        request = get_object_or_404(PersonalTraining,gym_member=user,id=data['request_id'])
+
+        if request.member_cancellation:
+            raise PermissionDenied(detail='You can\'t perform this action as you had already cancelled the session.')
+
+        if data['member_cancellation']:
+            if request.google_calendar_id:
+                request.cancel_booking()
+                request.member_cancellation = True
+                request.save()
+                return Response({"detail":"Trainer will be notified of the cancellation."},status=HTTP_200_OK)
+
+            request.member_cancellation = True
+            request.save()
+            return Response({"detail":"Trainer will be notified of the cancellation."},status=HTTP_200_OK)
