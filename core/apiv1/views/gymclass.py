@@ -73,6 +73,9 @@ class GymClassDetailAPIView(RetrieveUpdateAPIView):
 class GymClassDeleteAPIView(DestroyAPIView):
     queryset = GymClass.objects.all()
     serializer_class = GymClassListSerializer
+    permission_classes = [
+        AllowAny,
+    ]
 
     def perform_destroy(self, instance):
         if instance.google_calendar_id:

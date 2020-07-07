@@ -67,11 +67,11 @@ class GymClass(models.Model):
             "description": self.description,
             "start": {
                 "dateTime": self.start_time.strftime("%Y-%m-%dT%H:%M:%S.%f"),
-                "timeZone": "Africa/Nairobi",
+                "timeZone": "GMT+03:00",
             },
             "end": {
                 "dateTime": self.end_time.strftime("%Y-%m-%dT%H:%M:%S.%f"),
-                "timeZone": "Africa/Nairobi",
+                "timeZone": "GMT+03:00",
             },
             # "recurrence": ["RRULE:FREQ=DAILY;COUNT=2"],
             "attendees": [{"email": trainer_email}],
@@ -174,11 +174,11 @@ class PersonalTraining(models.Model):
             "description": self.terms,
             "start": {
                 "dateTime": self.start_time.strftime("%Y-%m-%dT%H:%M:%S.%f"),
-                "timeZone": "Africa/Nairobi",
+                "timeZone": "GMT+3:00",
             },
             "end": {
                 "dateTime": self.end_time.strftime("%Y-%m-%dT%H:%M:%S.%f"),
-                "timeZone": "Africa/Nairobi",
+                "timeZone": "GMT+3:00",
             },
             # "recurrence": ["RRULE:FREQ=DAILY;COUNT=2"],
             "attendees": [{"email": self.gym_trainer.email},{"email": self.gym_member.email},],
@@ -190,7 +190,6 @@ class PersonalTraining(models.Model):
                 ],
             },
         }
-
         event = service.events().insert(calendarId="primary", body=event).execute()
         # session = GymClass.objects.get(id=self.id)
         self.google_calendar_id = event.get("id")
