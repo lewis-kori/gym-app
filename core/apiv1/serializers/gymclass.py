@@ -57,11 +57,6 @@ class GymClassDetailSerializer(ModelSerializer):
 
     def get_current_user_booked(self, obj):
         user = self.context['request'].user
-        # catch anonymous user attribute error
-        try:
-            if user.attendance.all().exists():
-                return True
-            else:
-                return False
-        except:
-            return False
+        if obj.attendee_set.filter(member=user).exists():
+            return True
+        return False
