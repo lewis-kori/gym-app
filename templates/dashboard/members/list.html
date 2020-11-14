@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Members
+{% endblock %}
+
+{% block styles %}
+<link href="{% static 'vendor/data-tables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+
+{% if messages %}
+<div class="row mb-1 mr-1">
+    <div class="col-md-12 justify-content-center">
+        <ul class="messages">
+            {% for message in messages %}
+            {% if message.level == 40 %}
+            <div class="alert alert-danger alert-dismissible fade show">
+                <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% elif message.level == 25 %}
+            <div class="alert alert-success alert-dismissible fade show">
+                <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% elif message.level == 30 %}
+            <div class="alert alert-warning alert-dismissible fade show">
+                <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="text-center py-3 weight-600">Recently Added Members</h5>
+                <div class="table-responsive table-responsive-sm">
+                    <div class="ml-2 float-right">
+                        <a href="{% url 'dashboard:members_dashboard:add_member' %}">
+                            <button class="btn btn-primary btn-sm mb-2">Add Member</button>
+                        </a>
+                    </div>
+                    <table class="table table-striped w-100" id="data-table">
+                        <thead>
+                            <tr>
+                                <th>Member Name</th>
+                                <th>Member phone</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in members %}
+                            <tr>
+                                <!-- <td>#{{member.i}}</td> -->
+                                <td>{{member}}</td>
+                                <td>{{member.phone_number}}</td>
+                                <td>{{member.email}}</td>
+                                <td>{{member.date_joined | timesince}}</td>
+                                {% if member.is_active %}
+                                <td><span class="badge badge-success">Active</span></td>
+                                {% else %}
+                                <td><span class="badge badge-danger">Inactive</span></td>
+                                {% endif %}
+                                <td>
+                                    <a class="btn btn-primary btn-sm"
+                                        href="{% url 'dashboard:members_dashboard:member_details' member.id %}">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'vendor/data-tables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/data-tables/dataTables.bootstrap4.min.js' %}"></script>
+<script>
+    $('#data-table').DataTable({
+        "order": [],
+        "pageLength": 25
+    });
+</script>
+{% endblock %}

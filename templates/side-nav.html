@@ -1,0 +1,83 @@
+<div class="left-nav-wrap">
+    <div class="left-sidebar">
+        <nav class="sidebar-menu">
+            <ul id="nav-accordion">
+                {% if request.user.is_superuser %}
+                <li class="sub-menu">
+                    <a href="{% url 'dashboard:index' %}" class="{% if request.path == '/' %}active{% endif %}">
+                        <i class="ti-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sub-menu">
+                    <a href="#" class="{% if '/member/' in request.path %}active{% endif %}">
+                        <i class="icon-people"></i>
+                        <span>Members</span>
+                    </a>
+                    <ul class="sub">
+                        <li class="#">
+                            <a href="{% url 'dashboard:members_dashboard:members_list' %}">All Members</a>
+                        </li>
+                    </ul>
+                    <ul class="sub">
+                        <li class="#">
+                            <a href="{% url 'dashboard:members_dashboard:add_member' %}">Add Member</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="#" class="{% if '/trainers/' in request.path %}active{% endif %}">
+                        <i class="icon-people"></i>
+                        <span>Trainers</span>
+                    </a>
+                    <ul class="sub">
+                        <li class="#">
+                            <a href="{% url 'dashboard:trainers_dashboard:trainers_list' %}">All Trainers</a>
+                        </li>
+                    </ul>
+                    <ul class="sub">
+                        <li class="#">
+                            <a href="{% url 'dashboard:trainers_dashboard:add_trainer' %}">Add Trainer</a>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                {% comment %}<li class="sub-menu">
+                    <a href="#" class="{% if '/classes/' in request.path %}active{% endif %}">
+                        <i class="fas fa-golf-ball"></i>
+                        <span>Gym Classes</span>
+                    </a>
+                    <ul class="sub">
+                        <li class="#">
+                            <a href="{% url 'dashboard:all_gym_classes' %}">All Classes</a>
+                        </li>
+                    </ul>
+                    <ul class="sub">
+                        <li class="#">
+                            <a href="{% url 'dashboard:add_gym_class' %}">Add Gym Class</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="#" class="{% if request.path == '/bookings/' %}active{% endif %}">
+                        <i class="ti-pulse"></i>
+                        <span>Bookings</span>
+                    </a>
+                    <ul class="sub">
+                        <li class="#">
+                            <a href="{% url 'dashboard:all_personal_trainings' %}">
+                                <span>Personal Trainings</span>
+                            </a>
+                        </li>
+                        <li class="#">
+                            <a href="{% url 'dashboard:gym_class_bookings' %}">
+                                <span>Class Bookings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% endcomment %}
+            </ul>
+        </nav>
+    </div>
+</div>

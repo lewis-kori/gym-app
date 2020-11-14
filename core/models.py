@@ -151,7 +151,7 @@ class PersonalTraining(models.Model):
     location_name = models.CharField(max_length=255,null=True,blank=True)
     lon = models.DecimalField(max_digits=20, decimal_places=15, null=True, blank=True)
     lat = models.DecimalField(max_digits=20, decimal_places=15, null=True, blank=True)
-    terms = models.TextField()
+    terms = models.TextField(null=True, blank=True)
     gloves = models.BooleanField(default=False)
     transport = models.BooleanField(default=False)
     weights = models.BooleanField(default=False)

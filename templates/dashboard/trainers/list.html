@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Trainers
+{% endblock %}
+
+{% block styles %}
+<link href="{% static 'vendor/data-tables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="text-center py-3">Recently Added Trainers</h5>
+                <div class="table-responsive table-responsive-sm">
+                <div class="float-right ml-2">
+                    <a href="{% url 'dashboard:trainers_dashboard:add_trainer' %}">
+                        <button class="btn btn-primary btn-sm mb-2">Add Trainer</button>
+                    </a>
+                </div>
+                    <table class="table table-striped" id="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>phone Number</th>
+                                <th>Added On</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trainer in trainers %}
+                            <tr>
+                                <td>{{trainer.get_full_name}}</td>
+                                <td>{{trainer.phone_number}}</td>
+                                <td>{{ trainer.date_joined }} </td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm"
+                                        href="{% url 'dashboard:trainers_dashboard:trainer_details' trainer.pk %}">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'vendor/data-tables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/data-tables/dataTables.bootstrap4.min.js' %}"></script>
+<script>
+    $('#data-table').DataTable({
+        "order": [],
+        "pageLength": 25
+    });
+</script>
+{% endblock %}

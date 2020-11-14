@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    "django.contrib.humanize",
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'widget_tweaks',
 
 
     # dev defined apps
@@ -73,7 +75,7 @@ ROOT_URLCONF = 'gym.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,6 +135,10 @@ ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
 
+
+# LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "dashboard:index"
+LOGOUT_URL = "logout"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

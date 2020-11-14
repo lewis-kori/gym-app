@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-3 col-sm-6">
+        <div class="card mb-4 bg-success">
+            <div class="card-body">
+                <div class="media d-flex align-items-center">
+                    <div class="mr-4 rounded-circle bg-white sr-icon-box text-success">
+                        <i class="fa fa-money"></i>
+                    </div>
+                    <div class="media-body text-white">
+                        {% if trainers_count == None %}
+                        <h4 class="text-uppercase mb-0 weight-500">0</h4>
+                        {% else %}
+                        <h4 class="text-uppercase mb-0 weight-500">{{trainers_count}}</h4>
+                        {% endif %}
+                        <span>Trainers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card mb-4 bg-warning">
+            <div class="card-body">
+                <div class="media d-flex align-items-center">
+                    <div class="mr-4 rounded-circle bg-white sr-icon-box text-warning">
+                        <i class="ti-truck"></i>
+                    </div>
+                    <div class="media-body text-white">
+                        <h4 class="text-uppercase mb-0 weight-500">{{members_count}}</h4>
+                        <span>Members</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card mb-4 bg-purple">
+            <div class="card-body">
+                <div class="media d-flex align-items-center ">
+                    <div class="mr-4 rounded-circle bg-white sr-icon-box text-purple">
+                        <i class="fa fa-money"></i>
+                    </div>
+                    <div class="media-body text-light">
+                        <h4 class="text-uppercase mb-0 weight-600"> {{personal_training_sessions}} </h4>
+                        <span>Personal Training sessions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card mb-4 bg-primary">
+            <div class="card-body">
+                <div class="media d-flex align-items-center">
+                    <div class="mr-4 rounded-circle bg-white  sr-icon-box text-primary">
+                        <i class="vl_download"></i>
+                    </div>
+                    <div class="media-body text-white">
+                        <h4 class="text-uppercase mb-0 weight-600">{{ gym_classes }}</h4>
+                        <span>Gym classes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="row">
+       
+        <div class="col-md-12">
+            <div class="card shadow-sm mb-3 pl-5">
+                <div class="card-body justify-content-center">
+                    <h5 class="text-center py-3 weight-600">Recent Members</h5>
+                    <div class="table-responsive table-responsive-sm">
+                        <table class="table table-striped">
+                             <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>phone Number</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in recent_members %}
+                            <tr>
+                                <td>{{member.get_full_name}}</td>
+                                <td>{{member.phone_number}}</td>
+                                <td>{{member.email}}</td>
+                                <td>{{member.date_joined | timesince}} ago</td>
+                                {% if member.is_active %}
+                                <td><span class="badge badge-success">Active</span></td>
+                                {% else %}
+                                <td><span class="badge badge-danger">Inactive</span></td>
+                                {% endif %}
+                                <td>
+                                    <a class="btn btn-primary btn-sm"
+                                        href="{% url 'dashboard:members_dashboard:member_details' member.id %}">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-12">
+            <div class="card shadow-sm mb-3 pl-5">
+                <div class="card-body justify-content-center">
+                    <h5 class="text-center py-3 weight-600">Recent Trainers</h5>
+                    <div class="table-responsive table-responsive-sm">
+                        <table class="table table-striped">
+                             <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>phone Number</th>
+                                <th>Email</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trainer in recent_trainers %}
+                            <tr>
+                                <td>{{trainer.get_full_name}}</td>
+                                <td>{{trainer.phone_number}}</td>
+                                <td>{{trainer.email}}</td>
+                                <td>{{trainer.date_joined | timesince}} ago</td>
+                                {% if trainer.is_active %}
+                                <td><span class="badge badge-success">Active</span></td>
+                                {% else %}
+                                <td><span class="badge badge-danger">Inactive</span></td>
+                                {% endif %}
+                                <td>
+                                    <a class="btn btn-primary btn-sm"
+                                        href="{% url 'dashboard:trainers_dashboard:trainer_details' trainer.pk %}">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

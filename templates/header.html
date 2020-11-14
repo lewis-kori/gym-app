@@ -1,0 +1,31 @@
+{% load static %}
+
+<header class="app-header">
+    <div class="branding-wrap">
+        <a href="#" class="nav-link mt-2 float-left js_left-nav-toggler pos-fixed">
+            <i class="ti-align-right"></i>
+        </a>
+        <div class="navbar-brand pos-fixed">
+            <a class="" href="/">
+                <img src="{% static 'img/logo.gif' %}" style="height:2.55em;" alt="technogym" id="logo">
+            </a>
+        </div>
+    </div>
+
+    <ul class="header-links hide-arrow navbar p-3">
+        <li class="nav-item sm-device-none pt-2" style="padding-right: 7rem;">
+            <h4 class="text-center">Technogym - Data Management System</h4>
+        </li>
+        <li class="nav-item sm-device-none mr-3">
+            <i class="fa fa-clock-o"></i> <span id="clock">Loading...</span>
+        </li>
+        <li class="nav-item sm-device-none mr-3">
+            <i class="fa fa-user"></i> {{ request.user.get_full_name }}
+        </li>
+        <li class="nav-item sm-device-none">
+            <a href="{% url 'logout' %}">
+                <i class="fa fa-sign-out"></i> Logout
+            </a>
+        </li>
+    </ul>
+</header>

@@ -11,3 +11,4 @@ db.sqlite3
 *.pickle
 *.code-workspace
 .DS_Store
+/static/
