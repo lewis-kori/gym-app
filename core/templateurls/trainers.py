@@ -2,7 +2,7 @@ from django.urls import path
 
 from ..templateviews.trainers import (TrainerDetailTemplateView,
                                       TrainerListTemplateView,
-                                      TrainerRegistrationTemplateView)
+                                      TrainerRegistrationTemplateView, TrainerEditTemplateView)
 
 app_name = 'trainers_dashboard'
 
@@ -11,6 +11,9 @@ urlpatterns = [
     path('details/<int:pk>/',
          TrainerDetailTemplateView.as_view(),
          name='trainer_details'),
+    path('edit/<int:pk>/',
+         TrainerEditTemplateView.as_view(),
+         name='trainer_edit'),
     path('registration/',
          TrainerRegistrationTemplateView.as_view(),
          name='add_trainer'),

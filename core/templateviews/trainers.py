@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.views.generic import CreateView, DetailView, ListView
+from django.urls import reverse_lazy
 from django.utils.crypto import get_random_string
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from ..mixins import AdminDashBoardMixin
 
@@ -26,6 +27,7 @@ class TrainerDetailTemplateView(AdminDashBoardMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["personal_trainings"] = self.object.trainer_personal_trainings.all()
         context["gym_classes"] = self.object.classes_in_charge.all()
+        context['trainer_profile'] = self.object.trainer_profiles
         return context
 
 class TrainerRegistrationTemplateView(AdminDashBoardMixin, CreateView):
@@ -52,3 +54,24 @@ class TrainerRegistrationTemplateView(AdminDashBoardMixin, CreateView):
         user.save()
 
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("dashboard:trainers_dashboard:trainer_details",
+                            kwargs={"pk": self.object.pk})
+
+# class customer edit form
+class TrainerEditTemplateView(AdminDashBoardMixin, UpdateView):
+    model = User
+    fields = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone_number',
+        'location',
+        'image',
+    ]
+    template_name = "dashboard/members/add.html"
+
+    def get_success_url(self):
+        return reverse_lazy("dashboard:trainers_dashboard:trainer_details",
+                            kwargs={"pk": self.object.pk})

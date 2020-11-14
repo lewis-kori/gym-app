@@ -1,1 +1,286 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
+{% load static %} 
+{% load humanize %} 
+{% block title %} trainer Details - {{ trainer.get_username }} {% endblock %} 
+{% block styles %}
+<link
+  href="{% static 'vendor/data-tables/dataTables.bootstrap4.min.css' %}"
+  rel="stylesheet"
+/>
+<style>
+  .nav-link.active {
+    color: white !important;
+    background-color: #005e2a !important;
+  }
+</style>
+{% endblock %} 
+{% block content %}
+
+<div class="tab-content" id="pills-tabContent">
+  <!-- start side card section -->
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm">
+        {% if trainer.image %}
+        <img
+          src="{{trainer.image.url}}"
+          alt="{{trainer.get_full_name}}"
+          class="card-img-top"
+        />
+        {% else %}
+        <img
+        src="{% static 'img/logo.gif' %}"
+        class="card-img-top"
+        alt="{{trainer.get_full_name}}"
+      />
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title text-center">
+            {{ trainer.first_name }} 
+            {% if trainer.last_name %} 
+            {{ trainer.last_name }} 
+            {% endif %} 
+          </h5>
+          <hr />
+        </div>
+      </div>
+    </div>
+    <!-- end side bar section -->
+    <div class="col-md-8">
+
+      <!-- start profile tab -->
+      <div
+        class="tab-pane fade show active"
+        id="pills-profile"
+        role="tabpanel"
+        aria-labelledby="pills-profiles-tab"
+      >
+        <div id="first-tab" class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 shadow-sm mr-2 ml-2">
+                <table class="table table-striped">
+                  <tbody>
+                    <tr>
+                      <th>Phone Number</th>
+                      <td>{{ trainer.phone_number }}</td>
+                    </tr>
+                    <tr>
+                      <th>Email</th>
+                      <td>{{ trainer.email }}</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>{{ trainer_profile.description }}</td>
+                    </tr>
+                    <tr>
+                      <th>Can Login</th>
+                      {% if trainer.is_active %}
+                      <td>
+                        <span class="badge badge-pill badge-success">Yes</span>
+                      </td>
+                      {% else %}
+                      <td>
+                        <span class="badge badge-pill badge-danger">No</span>
+                      </td>
+                      {% endif %}
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <td>
+                        <a
+                        class="mr-3"
+                          href="{% url 'dashboard:trainers_dashboard:trainer_edit' trainer.id %}"
+                        >
+                          <button class="btn btn-club btn-sm mx-1">Edit</button>
+                        </a>
+                        <a
+                        class="mr-3"
+                          href="{% url 'dashboard:trainers_dashboard:trainer_edit' trainer.id %}"
+                        >
+                          <button class="btn btn-danger btn-sm mx-1">suspend</button>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end profile tab -->
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active ml-3" id="pills-classes-tab" data-toggle="pill" href="#pills-classes" role="tab" aria-controls="pills-classes" aria-selected="true">Classes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-personal-trainings-tab" data-toggle="pill" href="#pills-personal-trainings" role="tab" aria-controls="pills-personal-trainings" aria-selected="false">Personal Trainings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile-specialties" role="tab" aria-controls="pills-profile-specialties" aria-selected="false">Specialties</a>
+        </li>
+      </ul>
+    <div class="col-md-12 tab-content" id="pills-tabContent">
+    <!-- order history area -->
+    <div
+      class="col-md-12 tab-pane fade show active"
+      id="pills-classes"
+      role="tabpanel"
+      aria-labelledby="pills-classes-tab"
+    >
+      <div class="card shadow-sm" id="orders-tab">
+        <div class="card-body">
+          <h5 class="text-center py-3">Classes In charge</h5>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>class ID</th>
+                  <th>Name</th>
+                  <th>Trainer</th>
+                  <th>Day of week</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for class in gym_classes %}
+                <tr>
+                  <td>{{ class.id }}</td>
+                  <td>{{ class.name }}</td>
+                  {% if class.trainer %}
+                  <td>
+                    <a href="{% url 'dashboard:trainers_dashboard:trainer_details' class.trainer.id %}"
+                      >{{  class.trainer }}</a
+                    >
+                  </td>
+                  {% else %}
+                  <td>
+                    <span class="badge badge-pill badge-warning">pending trainer</span>
+                  </td>
+                  {% endif %}
+                  <td>{{ class.day_of_week }}</td>
+                  <td>
+                    <a href="#">
+                      <button class="btn btn-primary btn-sm">View</button>
+                    </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr class="text-center">
+                  <td colspan="5">No classes attended yet.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end order history -->
+
+    <!-- deposit history starts here -->
+    <div
+      class="col-md-12 tab-pane fade"
+      id="pills-personal-trainings"
+      role="tabpanel"
+      aria-labelledby="#pills-personal-trainings-tab"
+    >
+      <div class="card shadow-sm" id="personal-trainings">
+        <div class="card-body">
+          <h5 class="text-center py-3">Personal Training</h5>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>location</th>
+                  <th>start time</th>
+                  <th>end time</th>
+                  <th>Trainer accepted</th>
+                  <th>trainer canceled</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for training in personal_trainings %}
+                <tr>
+                  <td><a href="{% url 'dashboard:members_dashboard:member_details' training.gym_member.id %}">{{ training.gym_member }}</a></td>
+                  <td>{{ training.location_name }}</td>
+                  <td>{{training.start_time }}</td>
+                  <td>{{training.end_time }}</td>
+                  <td>
+                    {% if training.is_accepted %}
+                    <span class="badge badge-pill badge-success">Yes</span>
+                    {% else %}
+                    <span class="badge badge-pill badge-info">No</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if training.trainer_cancellation %}
+                    <span class="badge badge-pill badge-danger">Yes</span>
+                    {% else %}
+                    <span class="badge badge-pill badge-success">No</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% empty %}
+                <tr class="text-center">
+                  <td colspan="5">No personal training sessions booked yet</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  deposit history end here -->
+
+    <!-- payment history starts here -->
+    <div
+      class="col-md-12 tab-pane fade"
+      id="pills-profile-specialties"
+      role="tabpanel"
+      aria-labelledby="#pills-profile-specialties"
+    >
+      <div class="card shadow-sm" id="profile">
+        <div class="card-body">
+          <h5 class="text-center py-3">Specialties</h5>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for specialty in trainer_profile.specialities.all %}
+                <tr>
+                  <td>{{specialty.name}}</td>
+                  <td>{{specialty.description}}</td>
+                </tr>
+                {% empty %}
+                <tr class="text-center">
+                  <td colspan="5">Trainer has no specialties yet.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- payment history end here -->
+    </div>
+  </div>
+</div>
+{% endblock %} 
+
+{% block scripts %}
+{% endblock scripts %}
+
