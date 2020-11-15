@@ -82,6 +82,24 @@
                       </td>
                       {% endif %}
                     </tr>
+                    {% if profile %}
+                    <tr>
+                      <th>Description</th>
+                      <td>{{ profile.description }}</td>
+                    </tr>
+                    <tr>
+                      <th>Needs special care</th>
+                      {% if profile.is_disabled %}
+                      <td>
+                        <span class="badge badge-pill badge-danger">Yes</span>
+                      </td>
+                      {% else %}
+                      <td>
+                        <span class="badge badge-pill badge-success">No</span>
+                      </td>
+                      {% endif %}
+                    </tr>
+                    {% endif%}
                     <tr>
                       <th></th>
                       <td>

@@ -62,6 +62,7 @@ class MemberDetailTemplateView(AdminDashBoardMixin, DetailView):
             )
         context["gym_classes"] = self.object.attendance.all()
         context["next_of_kins"] = self.object.next_of_kins.all()
+        context["profile"] = self.object.member_profiles
         return context
 
 

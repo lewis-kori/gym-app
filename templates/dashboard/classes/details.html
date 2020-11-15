@@ -55,4 +55,38 @@
         </div>
     </div>
 </section>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="text-center py-3">Bookings</h5>
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>member</th>
+                        <th>email</th>
+                        <th>Booked on</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for booking in bookings %}
+                      <tr>
+                        <td><a href="{% url 'dashboard:members_dashboard:member_details' booking.member.id %}">{{ booking.member.get_full_name }}</a></td>
+                        <td>{{  booking.member.get_username }}</td>
+                        <td>{{ booking.booked_on  }}</td>
+                      </tr>
+                      {% empty %}
+                      <tr class="text-center">
+                        <td colspan="5">No bookings yet</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

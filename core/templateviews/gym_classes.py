@@ -25,6 +25,11 @@ class GymClassDetailView(AdminDashBoardMixin, DetailView):
     template_name = 'dashboard/classes/details.html'
     context_object_name = 'gym_class'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['bookings'] = self.object.attendee_set.all()
+        return context
+
 class GymClassDeleteView(AdminDashBoardMixin, DeleteView):
     model = GymClass
     template_name = 'dashboard/classes/confirm-delete.html'
