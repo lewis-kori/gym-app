@@ -93,9 +93,13 @@
                         </a>
                         <a
                         class="mr-3"
-                          href="{% url 'dashboard:members_dashboard:member_edit' member.id %}"
+                          href="{% url 'dashboard:confirm_suspend' member.id %}"
                         >
+                        {% if member.is_active %}
                           <button class="btn btn-danger btn-sm mx-1">suspend</button>
+                        {% else %}
+                        <button class="btn btn-info btn-sm mx-1">activate</button>
+                        {% endif %}
                         </a>
                       </td>
                     </tr>

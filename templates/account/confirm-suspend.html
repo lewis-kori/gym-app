@@ -1,0 +1,44 @@
+{% extends 'base.html' %} 
+{% block title %} Confirm {{ user.get_full_name }}
+{% if user.is_active %}
+suspend 
+{% else %}
+activation
+{% endif %}
+{% endblock %} 
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="text-center py-3">
+            {% if user.is_active %}
+            Suspend
+            {% else %}
+            activate
+            {% endif %}
+        </h3>
+        <div class="col-md-6 mx-auto">
+          <div class="py-3 text-center">
+              {% if user.is_active %}
+            <p>Proceed with suspending {{ user.get_full_name }}?</p>
+            <a
+              class="btn btn-danger"
+              href="{% url 'dashboard:suspend' user.pk %}"
+              >Suspend</a
+            >
+            {% else %}
+            <p>Proceed with activating {{ user.get_full_name }}?</p>
+            <a
+              class="btn btn-info"
+              href="{% url 'dashboard:suspend' user.pk %}"
+              >activate</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
