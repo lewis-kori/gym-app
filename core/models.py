@@ -1,4 +1,4 @@
-import datetime
+from django.urls import reverse
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -20,6 +20,7 @@ DAYS_OF_WEEK = [
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
+
 # stores workout categories and their description
 class WorkoutCategory(models.Model):
     name = models.CharField(max_length=255)
@@ -32,9 +33,9 @@ class WorkoutCategory(models.Model):
 # gym class table
 class GymClass(models.Model):
     name = models.CharField(max_length=250)
-    category = models.ForeignKey(
-        WorkoutCategory, on_delete=models.CASCADE, related_name="gym_classes"
-    )
+    category = models.ForeignKey(WorkoutCategory,
+                                 on_delete=models.CASCADE,
+                                 related_name="gym_classes")
     location = models.CharField(max_length=255)
     day_of_week = models.CharField(max_length=15, choices=DAYS_OF_WEEK)
     description = models.TextField()
@@ -47,12 +48,20 @@ class GymClass(models.Model):
         related_name="classes_in_charge",
     )
     attendees = models.ManyToManyField(
-        User, through="Attendee", related_name="attendance",
+        User,
+        through="Attendee",
+        related_name="attendance",
     )
-    google_calendar_id = models.CharField(max_length=255, null=True, blank=True)
+    google_calendar_id = models.CharField(max_length=255,
+                                          null=True,
+                                          blank=True)
 
     def __str__(self):
         return f"{self.name} by {self.trainer}"
+
+    def get_absolute_url(self):
+        return reverse("dashboard:classes_dashboard:gym_class_details",
+                       kwargs={"pk": self.pk})
 
     # the method creates a google calendar event when called
     def create_event(self, trainer_email):
@@ -74,17 +83,27 @@ class GymClass(models.Model):
                 "timeZone": "GMT+03:00",
             },
             # "recurrence": ["RRULE:FREQ=DAILY;COUNT=2"],
-            "attendees": [{"email": trainer_email}],
+            "attendees": [{
+                "email": trainer_email
+            }],
             "reminders": {
-                "useDefault": False,
+                "useDefault":
+                False,
                 "overrides": [
-                    {"method": "email", "minutes": 24 * 60},
-                    {"method": "popup", "minutes": 10},
+                    {
+                        "method": "email",
+                        "minutes": 24 * 60
+                    },
+                    {
+                        "method": "popup",
+                        "minutes": 10
+                    },
                 ],
             },
         }
 
-        event = service.events().insert(calendarId="primary", body=event).execute()
+        event = service.events().insert(calendarId="primary",
+                                        body=event).execute()
         self.google_calendar_id = event.get("id")
         self.save(update_fields=["google_calendar_id"])
 
@@ -94,11 +113,8 @@ class GymClass(models.Model):
         creds = calendar_setup()
         service = build("calendar", "v3", credentials=creds)
 
-        event = (
-            service.events()
-            .get(calendarId="primary", eventId=self.google_calendar_id)
-            .execute()
-        )
+        event = (service.events().get(
+            calendarId="primary", eventId=self.google_calendar_id).execute())
 
         attendees = event.get("attendees", [])
 
@@ -117,9 +133,9 @@ class GymClass(models.Model):
     def delete_event(self, event_id):
         creds = calendar_setup()
         service = build("calendar", "v3", credentials=creds)
-        service.events().delete(
-            calendarId="primary", eventId=event_id, sendUpdates="all"
-        ).execute()
+        service.events().delete(calendarId="primary",
+                                eventId=event_id,
+                                sendUpdates="all").execute()
 
 
 # pivot table for many to many relationships
@@ -134,23 +150,25 @@ class Attendee(models.Model):
 
 # personal training session
 class PersonalTraining(models.Model):
-    gym_member = models.ForeignKey(
-        User,
-        related_name="member_personal_trainings",
-        limit_choices_to={"role": "Member"},
-        on_delete=models.CASCADE
-    )
-    gym_trainer = models.ForeignKey(
-        User,
-        related_name="trainer_personal_trainings",
-        limit_choices_to={"role": "Trainer"},
-        on_delete=models.CASCADE
-    )
+    gym_member = models.ForeignKey(User,
+                                   related_name="member_personal_trainings",
+                                   limit_choices_to={"role": "Member"},
+                                   on_delete=models.CASCADE)
+    gym_trainer = models.ForeignKey(User,
+                                    related_name="trainer_personal_trainings",
+                                    limit_choices_to={"role": "Trainer"},
+                                    on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    location_name = models.CharField(max_length=255,null=True,blank=True)
-    lon = models.DecimalField(max_digits=20, decimal_places=15, null=True, blank=True)
-    lat = models.DecimalField(max_digits=20, decimal_places=15, null=True, blank=True)
+    location_name = models.CharField(max_length=255, null=True, blank=True)
+    lon = models.DecimalField(max_digits=20,
+                              decimal_places=15,
+                              null=True,
+                              blank=True)
+    lat = models.DecimalField(max_digits=20,
+                              decimal_places=15,
+                              null=True,
+                              blank=True)
     terms = models.TextField(null=True, blank=True)
     gloves = models.BooleanField(default=False)
     transport = models.BooleanField(default=False)
@@ -158,7 +176,9 @@ class PersonalTraining(models.Model):
     is_onsite = models.BooleanField(default=False)
     is_accepted = models.BooleanField(default=False)
     member_cancellation = models.BooleanField(default=False)
-    google_calendar_id = models.CharField(max_length=255,null=True,blank=True)
+    google_calendar_id = models.CharField(max_length=255,
+                                          null=True,
+                                          blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -172,9 +192,12 @@ class PersonalTraining(models.Model):
         service = build("calendar", "v3", credentials=creds)
 
         event = {
-            "summary": f'Personal traning for {self.gym_member.get_full_name()} by {self.gym_trainer.get_full_name()}',
-            "location": self.location_name,
-            "description": self.terms,
+            "summary":
+            f'Personal traning for {self.gym_member.get_full_name()} by {self.gym_trainer.get_full_name()}',
+            "location":
+            self.location_name,
+            "description":
+            self.terms,
             "start": {
                 "dateTime": self.start_time.strftime("%Y-%m-%dT%H:%M:%S.%f"),
                 "timeZone": "GMT+3:00",
@@ -184,16 +207,31 @@ class PersonalTraining(models.Model):
                 "timeZone": "GMT+3:00",
             },
             # "recurrence": ["RRULE:FREQ=DAILY;COUNT=2"],
-            "attendees": [{"email": self.gym_trainer.email},{"email": self.gym_member.email},],
+            "attendees": [
+                {
+                    "email": self.gym_trainer.email
+                },
+                {
+                    "email": self.gym_member.email
+                },
+            ],
             "reminders": {
-                "useDefault": False,
+                "useDefault":
+                False,
                 "overrides": [
-                    {"method": "email", "minutes": 24 * 60},
-                    {"method": "popup", "minutes": 10},
+                    {
+                        "method": "email",
+                        "minutes": 24 * 60
+                    },
+                    {
+                        "method": "popup",
+                        "minutes": 10
+                    },
                 ],
             },
         }
-        event = service.events().insert(calendarId="primary", body=event).execute()
+        event = service.events().insert(calendarId="primary",
+                                        body=event).execute()
         # session = GymClass.objects.get(id=self.id)
         self.google_calendar_id = event.get("id")
         self.save(update_fields=["google_calendar_id"])
@@ -202,9 +240,6 @@ class PersonalTraining(models.Model):
     def cancel_booking(self):
         creds = calendar_setup()
         service = build("calendar", "v3", credentials=creds)
-        service.events().delete(
-            calendarId="primary", eventId=self.google_calendar_id, sendUpdates="all"
-        ).execute()
-
-
-
+        service.events().delete(calendarId="primary",
+                                eventId=self.google_calendar_id,
+                                sendUpdates="all").execute()

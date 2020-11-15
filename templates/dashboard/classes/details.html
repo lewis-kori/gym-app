@@ -1,1 +1,58 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+{{ gym_class.name }}
+{% endblock %}
+
+
+{% block content %}
+<section class="bg-success h-25"></section>
+
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm contact-header mb-4">
+                    <div class="card-body">
+                        <div class="py-3">
+                            <h5 class="text-center font-weight-normal">{{ gym_class.name }}</h5>
+                            <p class="text-center font-weight-normal text-muted mb-0">
+                                <span class="ti-user"></span> {{ gym_class.trainer.get_full_name }} |&nbsp;
+                                <span class="ti-time"></span> {{ gym_class.start_time|naturaltime }} |&nbsp;
+                                <span class="ti-pencil-alt2"></span> {{ gym_class.day_of_week }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <img src="{% static 'img/logo.gif' %}" alt="{{ gym_class.name }}" class="w-100">
+                                <div class="py-3">
+
+                            <a href="{% url 'dashboard:classes_dashboard:update_gym_class' gym_class.id %}">
+                                <button class="btn btn-club btn-sm mx-1">Edit</button>
+                            </a>
+
+                            <a href="{% url 'dashboard:classes_dashboard:delete_gym_class' gym_class.id %}">
+                                <button class="btn btn-danger btn-sm mx-1">Delete</button>
+                            </a>
+                        </div>
+                            </div>
+                            <div class="col-md-8">
+                                {% autoescape on %}
+                                <p class="text-justify">{{ gym_class.description|safe }}</p>
+                                {% endautoescape %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Confirm Delete
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="text-center py-3">Delete</h3>
+                    <div class="col-md-6 mx-auto">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="py-3 text-center">
+                                <p> Proceed with Delete? </p>
+                                <button class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

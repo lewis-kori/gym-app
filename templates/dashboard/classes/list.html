@@ -1,1 +1,57 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+    Gym classes
+{% endblock %}
+
+
+{% block content %}
+    <section class="bg-success h-25"></section>
+
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card shadow-sm contact-header mb-4">
+                        <div class="card-body">
+                            <div class="py-3">
+                                <h5 class="text-center font-weight-normal">Recent gym classes</h5>
+                                <a class="btn btn-sm btn-club float-right" href="{% url 'dashboard:classes_dashboard:new_gym_class' %}">New gym class</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            {% for gym_class in gym_classes %}
+                                <a href=" {{ gym_class.get_absolute_url }} " class="text-decoration-none text-dark">
+                                    <div class="row no-gutters shadow-sm hover-shadow mb-4">
+                                        <div class="col-md-4 w-25 h-25">
+                                                <img src="{% static 'img/logo.gif' %}" alt="{{ gym_class.name }}"
+                                                class="img-fluid">
+                                        </div>
+                                        <div class="col-md-8 p-3 bg-light">
+                                            <h5 class="font-weight-normal text-capitalize">{{ gym_class.name }}</h5>
+                                            <small class="text-muted">
+                                                <span class="ti-user"></span> {{ gym_class.trainer.get_full_name }} &nbsp;
+                                                <span class="ti-time"></span> {{ gym_class.start_time|naturaltime }}|&nbsp;
+                                                <span class = "ti-pencil-alt2"></span> {{ gym_class.day_of_week }}
+                                            </small>
+                                            <p class="text-muted">{{ gym_class.description|truncatechars:400|safe|striptags }}</p>
+                                            <button class="btn btn-success text-transform-none px-5">Read more...</button>
+                                            
+                                        </div>
+                                    </div>
+                                </a>
+                            {% empty %}
+                                <p class="text-center">No gym_classs at the moment.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
