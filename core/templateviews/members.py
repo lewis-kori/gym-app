@@ -43,7 +43,7 @@ class MemberRegistrationTemplateView(AdminDashBoardMixin, CreateView):
         user.save()
 
         return super().form_valid(form)
-    
+
     def get_success_url(self) -> str:
         return reverse_lazy("dashboard:members_dashboard:members_details",
                             kwargs={"pk": self.object.pk})

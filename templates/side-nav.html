@@ -42,16 +42,17 @@
                     </ul>
                 </li>
                 {% endif %}
-                {% comment %}<li class="sub-menu">
+                <li class="sub-menu">
                     <a href="#" class="{% if '/classes/' in request.path %}active{% endif %}">
                         <i class="fas fa-golf-ball"></i>
                         <span>Gym Classes</span>
                     </a>
                     <ul class="sub">
                         <li class="#">
-                            <a href="{% url 'dashboard:all_gym_classes' %}">All Classes</a>
+                            <a href="{% url 'dashboard:classes_dashboard:all_gym_classes' %}">All Classes</a>
                         </li>
                     </ul>
+                    {% comment %}
                     <ul class="sub">
                         <li class="#">
                             <a href="{% url 'dashboard:add_gym_class' %}">Add Gym Class</a>
