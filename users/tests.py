@@ -40,8 +40,6 @@ class userProfileTestCase(APITestCase):
 
         self.assertEqual(response.status_code,status.HTTP_200_OK)
 
-    # # update user profiles
-    # def test_userprofile_profile(self):
-    #     profile_data={'description':'I am a very famous game character','is_disabled': False,}
-    #     response=self.client.patch(reverse('users:member_api_urls:member_profile_details',kwargs={'pk':1}), data=profile_data)
-    #     self.assertEqual(response.status_code,status.HTTP_200_OK)
+        profile_data={'description':'I am a very famous game character','is_disabled': False,}
+        response=self.client.patch(reverse('users:member_api_urls:member_profile_details',kwargs={'pk': 1}), data=profile_data)
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
