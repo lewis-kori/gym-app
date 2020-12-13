@@ -7,6 +7,7 @@ from django.views.generic import DetailView, TemplateView
 
 from .mixins import AdminDashBoardMixin, check_rights
 from .models import GymClass, PersonalTraining
+from .utils import send_account_status_email
 
 User = get_user_model()
 
@@ -39,7 +40,7 @@ def toggle_user_suspension(request, pk):
     user.is_active = not user.is_active
 
     # put email send here
-
+    send_account_status_email(request, user)
     user.save()
     messages.success(request, "User has been deactivated")
     if user.role == 'Member':

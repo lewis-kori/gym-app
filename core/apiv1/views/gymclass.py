@@ -64,10 +64,15 @@ class TrainerGymClassListAPIView(ListAPIView):
 # shows gym class Details
 class GymClassDetailAPIView(RetrieveUpdateAPIView):
     queryset = GymClass.objects.all()
-    serializer_class = GymClassDetailSerializer
+    serializer_class = GymClassCreateSerializer
     permission_classes = [
         AllowAny,
     ]
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GymClassDetailSerializer
+        return super().get_serializer_class()
+
 
 
 class GymClassDeleteAPIView(DestroyAPIView):

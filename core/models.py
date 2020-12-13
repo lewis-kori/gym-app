@@ -108,7 +108,7 @@ class GymClass(models.Model):
         self.save(update_fields=["google_calendar_id"])
 
     # updates a google calendar event and appends new attendees whenever called
-    def update_event(self, member_email):
+    def update_event(self, member_email=None):
 
         creds = calendar_setup()
         service = build("calendar", "v3", credentials=creds)

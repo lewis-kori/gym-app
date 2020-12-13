@@ -4,6 +4,7 @@ from django.utils.crypto import get_random_string
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from ..mixins import AdminDashBoardMixin
+from ..utils import send_account_status_email
 
 User = get_user_model()
 
@@ -82,3 +83,4 @@ class MemberEditTemplateView(AdminDashBoardMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("dashboard:members_dashboard:member_details",
                             kwargs={"pk": self.object.pk})
+

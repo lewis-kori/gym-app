@@ -34,10 +34,12 @@ class CustomUserSerializer(UserSerializer):
             'last_name',
             "role",
             "email",
+            'image',
             "phone_number",
             "location",
             'image',
             "is_superuser",
+            'is_active',
             "has_profile",
         )
 
