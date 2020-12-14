@@ -20,7 +20,14 @@ def calendar_setup():
 
 def send_account_status_email(request, user):
     site = Site.objects.get_current()
-    subject, from_email, to = f'{site.name} account blocked', f'{settings.DEFAULT_FROM_EMAIL}', f'{user.email}'
+        
+    if user.is_active:
+        subject= f'{site.name} account activated',
+    else:
+        subject = f'{site.name} account blocked',
+
+    subject, from_email, to = subject[0], f'{settings.DEFAULT_FROM_EMAIL}', f'{user.email}'
+
 
     if request.is_secure:
         protocol = 'https'

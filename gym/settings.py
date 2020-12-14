@@ -26,9 +26,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -94,12 +94,32 @@ WSGI_APPLICATION = 'gym.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': config('DB_ENGINE'),
-        'NAME': config('DB_NAME'),
+PRODUCTION = config('PRODUCTION', cast=bool, default=True)
+
+if PRODUCTION:
+    # # production db settings
+    # Database
+    # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+    DATABASES = {
+        'default': {
+            'ENGINE': config('DB_ENGINE'),
+            'NAME':  config('DB_NAME'), #change in prod
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': 5432
+        }
     }
-}
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+else:
+    # development db settings
+    DATABASES = {
+        "default": {
+            "ENGINE": config("DEV_DB_ENGINE"),
+            "NAME": os.path.join(BASE_DIR, config("DEV_DB_NAME")),  # change in prod
+        }
+    }
 
 
 # Password validation
@@ -164,8 +184,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
 # email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FROM_ADDRESS = 'support@techgymie.com'
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST=config('EMAIL_HOST')
+EMAIL_HOST_USER=config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD')
+EMAIL_PORT=config('EMAIL_PORT')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 AUTH_USER_MODEL = 'users.UserAccount'
 

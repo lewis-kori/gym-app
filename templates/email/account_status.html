@@ -213,7 +213,7 @@
 
             <tr>
 
-              <td align="left" class="header-logo" style="font-weight: 600; font-size: 30px; color: #ff3333; -premailer-width: 45%;" width="45%"><img src="https://drd4xu1up7rfx.cloudfront.net/reframe_2019/format-logo-black.jpg" alt="format" title="Format" width="121" style="width: 121px; border: 0; vertical-align: bottom;"></td>
+              <td align="left" class="header-logo" style="font-weight: 600; font-size: 30px; color: #ff3333; -premailer-width: 45%;" width="45%"><img src="https://drd4xu1up7rfx.cloudfront.net/reframe_2019/format-logo-black.jpg" alt="{{site.name}}" title="{{site.name}}" width="121" style="width: 121px; border: 0; vertical-align: bottom;"></td>
 
               <td class="header-caption" valign="bottom" style="color: #6F6B7C; font-size: 12px; line-height: 12px; text-align: right; vertical-align: bottom;" align="right">Professional Online Portfolios</td>
 
@@ -239,53 +239,25 @@
 
                 Your {{site.name}} account has been
                 {% if user.is_active %}
-                activated
+                activated.
                 {% else %}
-                deactivated
+                deactivated.
                 {% endif %}
 
 
                 {% if user.is_active %}
-                activated
+                We value you as our client.
                 {% else %}
                 To reactivate your account please contact the admin.
-                In the meantime, your account activity is safe with us 
+                In the meantime, your account activity is safe with us.
 
                 {% endif %}
                 
                 <br><br>
 
-                <div>
-
-
-
-                  <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.format.com/subscription_update?from_email=1&perishable_token=1B5OIGAF9E2wSbM4kgBWkMr3eZbRMvCotAhGE21U&switch_site_to=matt-helbig" style="height:50px;v-text-anchor:middle;width:200px" arcsize="8%" stroke="f" fillcolor="#00a777"><w:anchorlock/><center><![endif]--><a href="#" class="button" style="width: 200px; border-bottom-style: solid; border-bottom-color: #bbb; color: #ffffff; display: inline-block; line-height: 50px !important; text-decoration: none; -webkit-text-size-adjust: none; border-radius: 2px; font-family: sans-serif; font-size: 15px; font-weight: bold; text-align: center; background: #346AF3; border: 0;">
-                <a href="#" style="color: #000000; display: inline-block; line-height: 1.06; text-decoration: underline;">placeholder message</a>.
-                    Reactivate My Site
-
-                  </a>
-
-
-                  <!--[if mso]></center></v:roundrect><![endif]-->
-
-                </div>
-
-
-
-                <br><br>
-
-
-
-                Your website:<br>
-
-                <a href="#" style="color: #000000; display: inline-block; line-height: 1.06; text-decoration: underline;">smilesdavis.format.com</a>
-
-
-                <br><br>
-
                 Login:<br>
 
-                <a href="{{site.domain}}" style="color: #000000; display: inline-block; line-height: 1.06; text-decoration: none;">{{user.email}}</a>
+                <a href="{{protocol}}://{{site.domain}}" style="color: #000000; display: inline-block; line-height: 1.06; text-decoration: none;">{{user.email}}</a>
 
                 <br>
 
@@ -295,11 +267,11 @@
 
 
 
-                <strong class="text_subtitle" style="font-weight: 700;">We’re here to help</strong>
+                <strong class="text_subtitle" style="font-weight: 700;">We’re here to help.</strong>
 
                 <br><br>
 
-                <div style="max-width: 38em;">Take a look at our <a href="{{protocol}}://{{site.domain}}/legal" style="text-decoration: underline; color: #FFFFFF">terms of services</a> to avoid such events from reocurring and feel free to email us at <a href="maito:customercare@technogy.com" style="text-decoration: underline; color: #FFFFFF">customercare@technogym.com</a> if you have any questions.</div>
+                <div style="max-width: 38em;">Take a look at our <a href="{{protocol}}://{{site.domain}}/legal" style="text-decoration: underline; color: #000000">terms of services</a> to avoid such events from reocurring and feel free to email us at <a href="maito:customercare@technogym.com" style="text-decoration: underline; color: #000000">customercare@technogym.com</a> if you have any questions.</div>
 
 
 
