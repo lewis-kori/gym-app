@@ -37,3 +37,9 @@ class NextOfKinAPIView(ModelViewSet):
         user = self.request.user
         serializer.save(member=user)
         return serializer.save(member=user)
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.method == 'GET':
+            return qs.filter(member=self.request.user)
+        return qs
